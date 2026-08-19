@@ -1,6 +1,9 @@
 import Header from "./components/Header";
+import KpiBanner from "./components/KpiBanner";
+import RiskDistribution from "./components/RiskDistribution";
 import PlantTelemetry from "./components/PlantTelemetry";
 import RiskMap from "./components/RiskMap";
+import PollutantRiskProfile from "./components/PollutantRiskProfile";
 import AgentPipeline from "./components/AgentPipeline";
 import LogFeed from "./components/LogFeed";
 import MitigationPanel from "./components/MitigationPanel";
@@ -27,6 +30,9 @@ export default function App() {
     <div className="ops">
       <Header alertActive={alertActive} />
 
+      <KpiBanner plants={plants} selectedCluster={selectedCluster} />
+      <RiskDistribution plants={plants} />
+
       <div className="grid">
         <PlantTelemetry
           clusters={clusters}
@@ -37,7 +43,10 @@ export default function App() {
           onSimulate={runSimulation}
         />
 
-        <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
+        <div className="center-col">
+          <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
+          <PollutantRiskProfile plants={plants} />
+        </div>
 
         <div className="panel scrollpane">
           <AgentPipeline agentStatus={agentStatus} />

@@ -53,6 +53,38 @@ export const SO2_LIMITS_PPM = {
   "Metal Processing": 76.0,
 };
 
+// Full regulatory limits matrix from regulatory_limits.csv
+export const REGULATORY_LIMITS = {
+  Chemical: {
+    so2_ppm: 80.0,
+    nox_ppm: 60.0,
+    pm_ug_m3: 100.0,
+    co_ppm: 30.0,
+    voc_ppm: 40.0,
+  },
+  "Textile Dyeing": {
+    so2_ppm: 88.0,
+    nox_ppm: 66.0,
+    pm_ug_m3: 110.0,
+    co_ppm: 33.0,
+    voc_ppm: 44.0,
+  },
+  Pharma: {
+    so2_ppm: 72.0,
+    nox_ppm: 54.0,
+    pm_ug_m3: 90.0,
+    co_ppm: 27.0,
+    voc_ppm: 36.0,
+  },
+  "Metal Processing": {
+    so2_ppm: 76.0,
+    nox_ppm: 57.0,
+    pm_ug_m3: 95.0,
+    co_ppm: 28.5,
+    voc_ppm: 38.0,
+  },
+};
+
 // applicableIndustryTypes mirrors the semicolon-delimited column in
 // mitigation_actions.csv, split into an array here.
 export const MITIGATION_CATALOG = [

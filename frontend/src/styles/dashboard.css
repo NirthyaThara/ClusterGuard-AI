@@ -77,6 +77,218 @@ body {
 .hdr-right { display: flex; align-items: center; gap: 14px; }
 .clock { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 
+/* ---------- kpi banner ---------- */
+.kpi-banner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(10, 9, 18, 0.6);
+  border-bottom: 1px solid var(--hairline);
+}
+.kpi-card {
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.kpi-card.critical {
+  animation: pulse-critical 2s infinite ease-in-out;
+}
+@keyframes pulse-critical {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 77, 106, 0); }
+  50% { box-shadow: 0 0 14px rgba(255, 77, 106, 0.25); }
+}
+.kpi-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.kpi-icon-wrap {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kpi-value {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.kpi-sub {
+  font-size: 10.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- risk distribution (2-column layout) ---------- */
+.risk-dist-wrap {
+  padding: 14px 24px;
+  background: rgba(10, 9, 18, 0.45);
+  border-bottom: 1px solid var(--hairline);
+}
+.risk-dist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.risk-dist-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+.risk-dist-2col {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+/* Left: Donut Chart (~175px) */
+.donut-chart-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.donut-chart-wrap {
+  width: 175px;
+  height: 175px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.donut-segment {
+  cursor: pointer;
+}
+.donut-center-group {
+  pointer-events: none;
+}
+.donut-center-val {
+  font-size: 19px;
+  font-weight: 800;
+  fill: var(--text);
+}
+.donut-center-lbl {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  fill: var(--muted);
+}
+.donut-center-sub {
+  font-size: 5.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: var(--muted);
+}
+
+/* Right: Expanded Risk Breakdown */
+.donut-legend-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.section-subtitle {
+  font-size: 9.5px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.donut-legend-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.donut-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--panel-raised);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.donut-legend-row:hover,
+.donut-legend-row.hovered {
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.04);
+}
+.donut-legend-row.dimmed {
+  opacity: 0.35;
+}
+.donut-legend-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.donut-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.donut-legend-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.donut-legend-right {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.donut-legend-count {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.donut-legend-pct {
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* ---------- grid ---------- */
 .grid {
   display: grid;
@@ -170,6 +382,133 @@ body {
 }
 .sim-btn:hover { background: rgba(255, 77, 106, 0.18); }
 .sim-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- center column ---------- */
+.center-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--hairline);
+  overflow-y: auto;
+}
+.center-col .map-wrap {
+  min-height: 360px;
+  flex: 1;
+}
+
+/* ---------- pollutant risk profile ---------- */
+.pollutant-profile-wrap {
+  padding: 12px 16px 14px;
+  background: var(--panel);
+  border-top: 1px solid var(--hairline);
+}
+.pollutant-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pollutant-profile-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+.pollutant-legend-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 9.5px;
+  color: var(--muted);
+}
+.legend-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.legend-chip-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+}
+.pollutant-bars-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pollutant-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pollutant-name-wrap {
+  width: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.pollutant-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.pollutant-unit {
+  font-size: 9px;
+  color: var(--muted);
+}
+.pollutant-bar-track {
+  flex: 1;
+  height: 9px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+}
+.limit-marker-line {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 2;
+}
+.pollutant-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease, background-color 0.4s ease;
+  position: relative;
+  z-index: 1;
+}
+.pollutant-bar-fill.spike {
+  box-shadow: 0 0 10px rgba(255, 77, 106, 0.4);
+}
+.pollutant-ratio-wrap {
+  width: 76px;
+  flex-shrink: 0;
+  text-align: right;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.pollutant-ratio-val {
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.pollutant-ratio-lbl {
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
 
 /* ---------- center: map ---------- */
 .map-wrap { position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0; }
@@ -316,7 +655,15 @@ body {
 }
 
 /* ---------- responsive ---------- */
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
+  .kpi-banner { grid-template-columns: repeat(2, 1fr); }
+  .risk-dist-2col { grid-template-columns: 1fr; justify-items: center; gap: 18px; }
+  .donut-legend-col { max-width: 360px; }
   .grid { grid-template-columns: 1fr; }
   .panel { border-right: none; border-bottom: 1px solid var(--hairline); }
+}
+
+@media (max-width: 600px) {
+  .kpi-banner { grid-template-columns: 1fr; }
+  .donut-chart-wrap { width: 145px; height: 145px; }
 }
