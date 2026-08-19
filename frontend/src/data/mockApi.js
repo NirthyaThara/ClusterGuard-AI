@@ -61,8 +61,10 @@ function rankMitigations(industryType) {
     (a, b) => b.reduction / b.costInr - a.reduction / a.costInr
   );
   return ranked.slice(0, 3).map((m) => ({
+    id: m.id,
     name: m.name,
     reduction: m.reduction,
+    costInr: m.costInr,
     cost: Math.round((m.costInr / 200000) * 100), // normalized 0-100 for the bar
     production: m.production,
   }));
@@ -86,19 +88,14 @@ export function runSpikeSimulation(targetPlant, handlers) {
 
   const steps = [
     () => {
-      onAgentStatus("monitor", "active");
-      onLog("Monitoring", `Anomaly detected on ${targetPlant.name} — SO₂ +186% vs. rolling baseline.`);
-    },
-    () => {
-      onAgentStatus("monitor", "done");
-      onAgentStatus("predict", "active");
+      onAgentStatus("risk", "active");
       onLog(
         "Risk Prediction",
-        `Trend forecast: SO₂ on track to cross the ${limit ?? "—"} ppm TNPCB limit for ${targetPlant.industryType} in ~40 min.`
+        `Anomaly detected on ${targetPlant.name} — SO₂ +186% vs. rolling baseline. Forecast: crosses ${limit ?? "—"} ppm limit in ~40 min.`
       );
     },
     () => {
-      onAgentStatus("predict", "done");
+      onAgentStatus("risk", "done");
       onAgentStatus("gis", "active");
       onLog(
         "GIS Impact",
@@ -109,18 +106,16 @@ export function runSpikeSimulation(targetPlant, handlers) {
     },
     () => {
       onAgentStatus("gis", "done");
-      onAgentStatus("mitigate", "active");
-      onLog("Mitigation", `Scoring candidate actions for ${targetPlant.industryType} plants on reduction / cost / production impact.`);
+      onAgentStatus("mitigation", "active");
+      onLog(
+        "Mitigation & Decision",
+        `Scoring candidate actions for ${targetPlant.industryType} plants on reduction, cost & production impact.`
+      );
     },
     () => {
-      onAgentStatus("mitigate", "done");
-      onAgentStatus("decide", "active");
-      onLog("Decision", "Ranking complete. Awaiting operator review.");
-    },
-    () => {
-      onAgentStatus("decide", "done");
+      onAgentStatus("mitigation", "done");
       const options = rankMitigations(targetPlant.industryType);
-      onLog("Decision", options[0] ? `Recommended: "${options[0].name}".` : "No applicable mitigation found.");
+      onLog("Mitigation & Decision", options[0] ? `Recommended: "${options[0].name}".` : "No applicable mitigation found.");
       onResolved(options, options.length ? 0 : null);
     },
   ];

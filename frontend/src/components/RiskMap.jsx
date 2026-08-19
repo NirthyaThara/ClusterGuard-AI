@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Circle, Tooltip, useMap } from "react-leaflet";
 import { TrendingUp, Wind, AlertTriangle, ShieldCheck, MapPin, Radio } from "lucide-react";
 
-// Dark basemap for high-contrast environmental operations dashboard
-const TILE_URL = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+// CARTO Voyager: Clean, modern Google Maps-style light basemap with road hierarchy and visible water bodies
+const TILE_URL = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
 const TILE_ATTR = '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; OpenStreetMap contributors';
 
 // Haversine distance in km as client fallback
@@ -19,18 +19,28 @@ function calcHaversineKm(lat1, lon1, lat2, lon2) {
   return Math.round(R * c * 1000) / 1000;
 }
 
-// Controller to smoothly focus the map when a plant or cluster is selected
+// Controller to smoothly focus the map ONLY when target coordinates actually change
 function MapFocusController({ targetLocation, zoom = 13 }) {
   const map = useMap();
+  const lastPosRef = useRef(null);
+
+  const lat = targetLocation?.[0];
+  const lng = targetLocation?.[1];
 
   useEffect(() => {
-    if (targetLocation && targetLocation[0] && targetLocation[1]) {
-      map.flyTo(targetLocation, zoom, {
+    if (lat == null || lng == null) return;
+
+    const prev = lastPosRef.current;
+    const hasChanged = !prev || prev[0] !== lat || prev[1] !== lng;
+
+    if (hasChanged) {
+      lastPosRef.current = [lat, lng];
+      map.flyTo([lat, lng], zoom, {
         duration: 1.2,
         easeLinearity: 0.25,
       });
     }
-  }, [targetLocation, zoom, map]);
+  }, [lat, lng, zoom, map]);
 
   return null;
 }
@@ -52,16 +62,18 @@ export default function RiskMap({
   }, [selectedMapPlant, spikePlantId, plants]);
 
   // Determine center coordinates for the map
-  const defaultCenter = selectedCluster
-    ? [selectedCluster.lat, selectedCluster.lng]
-    : [13.15, 80.26];
+  const defaultCenter = useMemo(() => {
+    return selectedCluster
+      ? [selectedCluster.lat, selectedCluster.lng]
+      : [13.15, 80.26];
+  }, [selectedCluster?.id, selectedCluster?.lat, selectedCluster?.lng]);
 
   const focusTarget = useMemo(() => {
     if (activePlant && activePlant.lat && activePlant.lng) {
       return [activePlant.lat, activePlant.lng];
     }
     return defaultCenter;
-  }, [activePlant, defaultCenter]);
+  }, [activePlant?.id, activePlant?.lat, activePlant?.lng, defaultCenter]);
 
   // Radius in km and in meters
   const impactRadiusKm = gisReport?.impact_radius_km ?? 5.0;

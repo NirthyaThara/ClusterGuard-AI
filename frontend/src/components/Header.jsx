@@ -7,9 +7,11 @@ export default function Header({ alertActive }) {
   return (
     <div className="hdr disp">
       <div className="hdr-left">
-        <div className="brand-mark">
-          <ShieldCheck size={18} color="#fff" />
-        </div>
+        <img
+          src="/clusterguard-logo.png"
+          alt="ClusterGuard AI Logo"
+          className="brand-logo"
+        />
         <div>
           <div className="hdr-title">ClusterGuard AI</div>
           <div className="hdr-sub mono">Industrial Risk Operations Center</div>

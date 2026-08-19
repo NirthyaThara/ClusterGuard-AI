@@ -7,6 +7,7 @@ import PollutantRiskProfile from "./components/PollutantRiskProfile";
 import AgentPipeline from "./components/AgentPipeline";
 import LogFeed from "./components/LogFeed";
 import MitigationPanel from "./components/MitigationPanel";
+import Footer from "./components/Footer";
 import { useClusterGuard } from "./hooks/useClusterGuard";
 
 export default function App() {
@@ -46,16 +47,16 @@ export default function App() {
         <div className="center-col">
           <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
           <PollutantRiskProfile plants={plants} />
+          <MitigationPanel mitigations={mitigations} selectedAction={selectedAction} />
         </div>
 
         <div className="panel scrollpane">
           <AgentPipeline agentStatus={agentStatus} />
           <LogFeed log={log} />
-          {phase === "resolved" && (
-            <MitigationPanel mitigations={mitigations} selectedAction={selectedAction} />
-          )}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

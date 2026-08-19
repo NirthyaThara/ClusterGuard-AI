@@ -98,36 +98,27 @@ export const MITIGATION_CATALOG = [
   { id: 8, name: "Schedule Off-Peak Wind Operation", applicableIndustryTypes: ["Chemical", "Textile Dyeing", "Metal Processing", "Pharma"], reduction: 10, costInr: 3000, production: 8 },
 ];
 
-// Mirrors the 5-agent pipeline from the architecture diagram.
+// Mirrors the 3-agent architecture:
+// Agent 1: Risk Prediction Agent (ML telemetry anomaly & forecasting)
+// Agent 2: GIS Impact Agent (rule-based geospatial plume mapping)
+// Agent 3: Mitigation & Decision Agent (rule-based multi-criteria action ranking)
 export const AGENTS = [
   {
-    key: "monitor",
-    label: "Pollution Monitoring",
-    tag: "ML · anomaly detection",
-    detail: "Scans telemetry across all plants for deviations from baseline.",
-  },
-  {
-    key: "predict",
-    label: "Risk Prediction",
-    tag: "ML · trend forecast",
-    detail: "Forecasts whether the trend breaches the regulatory threshold.",
+    key: "risk",
+    label: "Risk Prediction Agent",
+    tag: "Agent 1 · ML forecast",
+    detail: "Scans telemetry across all plants for threshold breaches and trend forecast.",
   },
   {
     key: "gis",
-    label: "GIS Impact",
-    tag: "rule-based · geospatial",
-    detail: "Maps plume spread against schools, hospitals & water bodies.",
+    label: "GIS Impact Agent",
+    tag: "Agent 2 · geospatial plume",
+    detail: "Maps plume dispersion against nearby schools, hospitals & water bodies.",
   },
   {
-    key: "mitigate",
-    label: "Mitigation",
-    tag: "rule-based · scoring",
-    detail: "Scores candidate actions on reduction, cost & production impact.",
-  },
-  {
-    key: "decide",
-    label: "Decision & Coordination",
-    tag: "rule-based · multi-criteria",
-    detail: "Selects the best action and routes it to the dashboard.",
+    key: "mitigation",
+    label: "Mitigation & Decision Agent",
+    tag: "Agent 3 · action scoring",
+    detail: "Scores and ranks candidate interventions on reduction, cost & production impact.",
   },
 ];
