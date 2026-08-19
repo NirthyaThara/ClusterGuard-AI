@@ -1,0 +1,12 @@
+user_id,role,name,cluster_id,plant_id,email
+U001,Plant Operator,Lakshmi Menon,,PL01,lakshmi.menon@alpha.com
+U002,Plant Operator,Arun Kumar,,PL02,arun.kumar@bright.com
+U003,Plant Operator,Priya Nair,,PL03,priya.nair@coremetal.com
+U004,Plant Operator,Divya Suresh,,PL04,divya.suresh@delta.com
+U005,Plant Operator,Lakshmi Kumar,,PL05,lakshmi.kumar@everest.com
+U006,Plant Operator,Vijay Nair,,PL06,vijay.nair@falcon.com
+U007,Environmental Authority,Vijay Menon,CL01,,vijay.menon@tnpcb.gov.in
+U008,Environmental Authority,Divya Rajan,CL02,,divya.rajan@tnpcb.gov.in
+U009,Emergency Responder,Lakshmi Pillai,CL01,,lakshmi.pillai@tnpcb.gov.in
+U010,Regulator,Arun Iyer,CL01,,arun.iyer@tnpcb.gov.in
+U011,Regulator,Ravi Reddy,CL02,,ravi.reddy@tnpcb.gov.in

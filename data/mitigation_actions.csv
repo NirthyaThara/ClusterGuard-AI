@@ -1,0 +1,9 @@
+action_id,action_type,applicable_industry_types,typical_pollution_reduction_pct,typical_cost_inr,typical_production_impact_pct
+1,Activate Scrubber,Chemical;Metal Processing,35,60000,3
+2,Reduce Production Rate 20%,Chemical;Textile Dyeing;Metal Processing;Pharma,20,15000,20
+3,Switch to Low-Sulfur Fuel,Chemical;Metal Processing,25,80000,1
+4,Increase Effluent Treatment Cycle,Textile Dyeing;Pharma,30,40000,5
+5,Temporary Partial Shutdown,Chemical;Textile Dyeing;Metal Processing;Pharma,60,200000,60
+6,Install Dust Suppression System,Metal Processing,28,55000,2
+7,Optimize Process Temperature,Chemical;Pharma,12,8000,4
+8,Schedule Off-Peak Wind Operation,Chemical;Textile Dyeing;Metal Processing;Pharma,10,3000,8

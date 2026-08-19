@@ -1,0 +1,21 @@
+limit_id,pollutant,industry_type,permissible_limit,unit,standard_source,effective_from
+1,so2_ppm,Chemical,80.0,ppm,TNPCB,2023-01-01
+2,nox_ppm,Chemical,60.0,ppm,TNPCB,2023-01-01
+3,pm_ug_m3,Chemical,100.0,µg/m³,TNPCB,2023-01-01
+4,co_ppm,Chemical,30.0,ppm,TNPCB,2023-01-01
+5,voc_ppm,Chemical,40.0,ppm,TNPCB,2023-01-01
+6,so2_ppm,Textile Dyeing,88.0,ppm,TNPCB,2023-01-01
+7,nox_ppm,Textile Dyeing,66.0,ppm,TNPCB,2023-01-01
+8,pm_ug_m3,Textile Dyeing,110.0,µg/m³,TNPCB,2023-01-01
+9,co_ppm,Textile Dyeing,33.0,ppm,TNPCB,2023-01-01
+10,voc_ppm,Textile Dyeing,44.0,ppm,TNPCB,2023-01-01
+11,so2_ppm,Pharma,72.0,ppm,TNPCB,2023-01-01
+12,nox_ppm,Pharma,54.0,ppm,TNPCB,2023-01-01
+13,pm_ug_m3,Pharma,90.0,µg/m³,TNPCB,2023-01-01
+14,co_ppm,Pharma,27.0,ppm,TNPCB,2023-01-01
+15,voc_ppm,Pharma,36.0,ppm,TNPCB,2023-01-01
+16,so2_ppm,Metal Processing,76.0,ppm,TNPCB,2023-01-01
+17,nox_ppm,Metal Processing,57.0,ppm,TNPCB,2023-01-01
+18,pm_ug_m3,Metal Processing,95.0,µg/m³,TNPCB,2023-01-01
+19,co_ppm,Metal Processing,28.5,ppm,TNPCB,2023-01-01
+20,voc_ppm,Metal Processing,38.0,ppm,TNPCB,2023-01-01
