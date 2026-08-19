@@ -26,21 +26,21 @@ export const PLANTS = [
 ];
 
 export const SENSITIVE_ZONES = [
-  { id: "SL01", clusterId: "CL01", name: "St. Xavier HS", kind: "School", lat: 13.1533, lng: 80.2622, population: 420, weight: 0.9 },
-  { id: "SL02", clusterId: "CL01", name: "Manali General Hospital", kind: "Hospital", lat: 13.1509, lng: 80.2598, population: null, weight: 1.0 },
-  { id: "SL03", clusterId: "CL01", name: "Manali Nagar Colony", kind: "Residential", lat: 13.1541, lng: 80.2589, population: 3200, weight: 0.7 },
-  { id: "SL04", clusterId: "CL01", name: "Kosasthalaiyar River", kind: "River", lat: 13.156, lng: 80.265, population: null, weight: 0.8 },
-  { id: "SL05", clusterId: "CL01", name: "Manali Farm Belt", kind: "Farmland", lat: 13.148, lng: 80.27, population: null, weight: 0.4 },
-  { id: "SL11", clusterId: "CL01", name: "Greenfield Matric School", kind: "School", lat: 13.16, lng: 80.245, population: 500, weight: 0.9 },
-  { id: "SL13", clusterId: "CL01", name: "Riverside Nagar", kind: "Residential", lat: 13.165, lng: 80.255, population: 4100, weight: 0.7 },
-  { id: "SL06", clusterId: "CL02", name: "Ambattur Public School", kind: "School", lat: 13.115, lng: 80.1535, population: 380, weight: 0.9 },
-  { id: "SL07", clusterId: "CL02", name: "Ambattur Community Hospital", kind: "Hospital", lat: 13.1183, lng: 80.151, population: null, weight: 1.0 },
-  { id: "SL08", clusterId: "CL02", name: "Ambattur East Colony", kind: "Residential", lat: 13.114, lng: 80.158, population: 2800, weight: 0.7 },
-  { id: "SL09", clusterId: "CL02", name: "Cooum Tributary", kind: "River", lat: 13.12, lng: 80.16, population: null, weight: 0.75 },
-  { id: "SL10", clusterId: "CL02", name: "Ambattur Farmland", kind: "Farmland", lat: 13.109, lng: 80.145, population: null, weight: 0.4 },
-  { id: "SL12", clusterId: "CL02", name: "St. Luke's Clinic", kind: "Hospital", lat: 13.105, lng: 80.17, population: null, weight: 1.0 },
-  { id: "SL14", clusterId: "CL02", name: "North Belt Farms", kind: "Farmland", lat: 13.1, lng: 80.14, population: null, weight: 0.4 },
-  { id: "SL15", clusterId: "CL02", name: "Ambattur West Colony", kind: "Residential", lat: 13.125, lng: 80.145, population: 2600, weight: 0.7 },
+  { id: "SL01", clusterId: "CL01", name: "St. Xavier HS", kind: "School", lat: 13.1533, lng: 80.2622, estimated_population: 420, sensitivity_weight: 0.9 },
+  { id: "SL02", clusterId: "CL01", name: "Manali General Hospital", kind: "Hospital", lat: 13.1509, lng: 80.2598, estimated_population: null, sensitivity_weight: 1.0 },
+  { id: "SL03", clusterId: "CL01", name: "Manali Nagar Colony", kind: "Residential", lat: 13.1541, lng: 80.2589, estimated_population: 3200, sensitivity_weight: 0.7 },
+  { id: "SL04", clusterId: "CL01", name: "Kosasthalaiyar River", kind: "River", lat: 13.156, lng: 80.265, estimated_population: null, sensitivity_weight: 0.8 },
+  { id: "SL05", clusterId: "CL01", name: "Manali Farm Belt", kind: "Farmland", lat: 13.148, lng: 80.27, estimated_population: null, sensitivity_weight: 0.4 },
+  { id: "SL11", clusterId: "CL01", name: "Greenfield Matric School", kind: "School", lat: 13.16, lng: 80.245, estimated_population: 500, sensitivity_weight: 0.9 },
+  { id: "SL13", clusterId: "CL01", name: "Riverside Nagar", kind: "Residential", lat: 13.165, lng: 80.255, estimated_population: 4100, sensitivity_weight: 0.7 },
+  { id: "SL06", clusterId: "CL02", name: "Ambattur Public School", kind: "School", lat: 13.115, lng: 80.1535, estimated_population: 380, sensitivity_weight: 0.9 },
+  { id: "SL07", clusterId: "CL02", name: "Ambattur Community Hospital", kind: "Hospital", lat: 13.1183, lng: 80.151, estimated_population: null, sensitivity_weight: 1.0 },
+  { id: "SL08", clusterId: "CL02", name: "Ambattur East Colony", kind: "Residential", lat: 13.114, lng: 80.158, estimated_population: 2800, sensitivity_weight: 0.7 },
+  { id: "SL09", clusterId: "CL02", name: "Cooum Tributary", kind: "River", lat: 13.12, lng: 80.16, estimated_population: null, sensitivity_weight: 0.75 },
+  { id: "SL10", clusterId: "CL02", name: "Ambattur Farmland", kind: "Farmland", lat: 13.109, lng: 80.145, estimated_population: null, sensitivity_weight: 0.4 },
+  { id: "SL12", clusterId: "CL02", name: "St. Luke's Clinic", kind: "Hospital", lat: 13.105, lng: 80.17, estimated_population: null, sensitivity_weight: 1.0 },
+  { id: "SL14", clusterId: "CL02", name: "North Belt Farms", kind: "Farmland", lat: 13.1, lng: 80.14, estimated_population: null, sensitivity_weight: 0.4 },
+  { id: "SL15", clusterId: "CL02", name: "Ambattur West Colony", kind: "Residential", lat: 13.125, lng: 80.145, estimated_population: 2600, sensitivity_weight: 0.7 },
 ];
 
 // SO2 permissible limits (ppm) by industry type, TNPCB — used in the
