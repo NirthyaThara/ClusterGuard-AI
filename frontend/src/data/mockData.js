@@ -1,4 +1,5 @@
 // -----------------------------------------------------------------------
+<<<<<<< HEAD
 // Static reference data for the ClusterGuard AI demo — sourced directly
 // from the team's clusters.csv / plants.csv / sensitive_locations.csv /
 // regulatory_limits.csv / mitigation_actions.csv.
@@ -66,6 +67,12 @@ export const MITIGATION_CATALOG = [
   { id: 8, name: "Schedule Off-Peak Wind Operation", applicableIndustryTypes: ["Chemical", "Textile Dyeing", "Metal Processing", "Pharma"], reduction: 10, costInr: 3000, production: 8 },
 ];
 
+=======
+// Static reference data that is purely a UI concept (not from backend).
+// Everything else now comes from api.js → real FastAPI backend.
+// -----------------------------------------------------------------------
+
+>>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 // Mirrors the 5-agent pipeline from the architecture diagram.
 export const AGENTS = [
   {

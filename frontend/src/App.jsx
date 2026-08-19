@@ -21,7 +21,38 @@ export default function App() {
     selectedAction,
     runSimulation,
     alertActive,
+    clusters,
+    selectedCluster,
+    switchCluster,
+    loading,
+    error,
+    selectedMapPlant,
+    gisReport,
+    selectPlantOnMap,
   } = useClusterGuard();
+
+  if (loading) {
+    return (
+      <div className="ops" style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <div style={{ textAlign: "center" }}>
+          <div className="hdr-title" style={{ fontSize: "20px", marginBottom: "10px" }}>ClusterGuard AI</div>
+          <div className="mono" style={{ color: "var(--muted)" }}>Connecting to FastAPI backend...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="ops" style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <div style={{ textAlign: "center", color: "var(--red)" }}>
+          <div className="hdr-title" style={{ fontSize: "20px", marginBottom: "10px" }}>Backend Connection Error</div>
+          <div className="mono">{error}</div>
+          <div className="mono" style={{ color: "var(--muted)", marginTop: "10px", fontSize: "12px" }}>Ensure FastAPI server is running on http://localhost:8000</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="ops">
@@ -29,6 +60,7 @@ export default function App() {
 
       <div className="grid">
         <PlantTelemetry
+<<<<<<< HEAD
           clusters={clusters}
           selectedCluster={selectedCluster}
           onSelectCluster={setSelectedClusterId}
@@ -38,10 +70,31 @@ export default function App() {
         />
 
         <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
+=======
+          plants={plants}
+          phase={phase}
+          onSimulate={runSimulation}
+          clusters={clusters}
+          selectedCluster={selectedCluster}
+          switchCluster={switchCluster}
+          selectedMapPlantId={selectedMapPlant?.id}
+          onSelectPlant={selectPlantOnMap}
+        />
+
+        <RiskMap
+          plants={plants}
+          zones={zones}
+          spikePlantId={spikePlantId}
+          selectedCluster={selectedCluster}
+          selectedMapPlant={selectedMapPlant}
+          gisReport={gisReport}
+          onSelectPlant={selectPlantOnMap}
+        />
+>>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
         <div className="panel scrollpane">
           <AgentPipeline agentStatus={agentStatus} />
-          <LogFeed log={log} />
+          <LogFeed log={log} onSelectPlant={selectPlantOnMap} plants={plants} />
           {phase === "resolved" && (
             <MitigationPanel mitigations={mitigations} selectedAction={selectedAction} />
           )}
