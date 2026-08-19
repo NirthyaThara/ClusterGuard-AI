@@ -1,0 +1,9 @@
+plant_id,cluster_id,plant_name,industry_type,latitude,longitude,capacity_category,commissioned_year,compliance_history_score,status
+PL01,CL01,Alpha Chemicals,Chemical,13.152,80.261,Large,2008,0.72,Active
+PL02,CL01,Bright Dyes & Textiles,Textile Dyeing,13.1487,80.2635,Medium,2005,0.81,Active
+PL03,CL01,CoreMetal Works,Metal Processing,13.1555,80.2578,Large,2013,0.55,Active
+PL04,CL01,Delta Pharma Labs,Pharma,13.1502,80.2661,Medium,2012,0.9,Active
+PL05,CL02,Everest Chemicals,Chemical,13.116,80.152,Medium,2012,0.63,Active
+PL06,CL02,Falcon Textiles,Textile Dyeing,13.1128,80.1567,Small,2009,0.77,Active
+PL07,CL02,Granite Metal Industries,Metal Processing,13.1175,80.1502,Large,2008,0.48,Maintenance
+PL08,CL02,Horizon Pharma,Pharma,13.1109,80.1589,Small,2007,0.85,Active

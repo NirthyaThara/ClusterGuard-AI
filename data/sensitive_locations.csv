@@ -1,0 +1,16 @@
+location_id,cluster_id,location_type,name,latitude,longitude,estimated_population,sensitivity_weight
+SL01,CL01,School,St. Xavier HS,13.1533,80.2622,420,0.9
+SL02,CL01,Hospital,Manali General Hospital,13.1509,80.2598,,1.0
+SL03,CL01,Residential,Manali Nagar Colony,13.1541,80.2589,3200,0.7
+SL04,CL01,River,Kosasthalaiyar River,13.156,80.265,,0.8
+SL05,CL01,Farmland,Manali Farm Belt,13.148,80.27,,0.4
+SL06,CL02,School,Ambattur Public School,13.115,80.1535,380,0.9
+SL07,CL02,Hospital,Ambattur Community Hospital,13.1183,80.151,,1.0
+SL08,CL02,Residential,Ambattur East Colony,13.114,80.158,2800,0.7
+SL09,CL02,River,Cooum Tributary,13.12,80.16,,0.75
+SL10,CL02,Farmland,Ambattur Farmland,13.109,80.145,,0.4
+SL11,CL01,School,Greenfield Matric School,13.16,80.245,500,0.9
+SL12,CL02,Hospital,St. Luke's Clinic,13.105,80.17,,1.0
+SL13,CL01,Residential,Riverside Nagar,13.165,80.255,4100,0.7
+SL14,CL02,Farmland,North Belt Farms,13.1,80.14,,0.4
+SL15,CL02,Residential,Ambattur West Colony,13.125,80.145,2600,0.7
