@@ -1,13 +1,7 @@
-import { Play, CheckCircle2 } from "lucide-react";
+import { Star } from "lucide-react";
 import Meter from "./Meter";
 
-export default function MitigationPanel({
-  mitigations,
-  selectedAction,
-  setSelectedAction,
-  executed,
-  onExecute,
-}) {
+export default function MitigationPanel({ mitigations, selectedAction }) {
   if (mitigations.length === 0) return null;
 
   return (
@@ -16,12 +10,15 @@ export default function MitigationPanel({
         Mitigation Actions
       </div>
       {mitigations.map((m, i) => (
-        <div
-          key={m.name}
-          className={`action-card ${selectedAction === i ? "picked" : ""}`}
-          onClick={() => setSelectedAction(i)}
-        >
-          <div className="action-name">{m.name}</div>
+        <div key={m.name} className={`action-card ${i === selectedAction ? "picked" : ""}`}>
+          <div className="action-name-row">
+            <div className="action-name">{m.name}</div>
+            {i === selectedAction && (
+              <span className="action-badge">
+                <Star size={10} /> Recommended
+              </span>
+            )}
+          </div>
           <div className="action-metric">
             <span className="action-metric-label mono">Reduce</span>
             <Meter value={m.reduction} tone="var(--green)" />
@@ -36,21 +33,6 @@ export default function MitigationPanel({
           </div>
         </div>
       ))}
-      <button
-        className={`exec-btn ${executed ? "done" : ""}`}
-        disabled={selectedAction === null || executed}
-        onClick={onExecute}
-      >
-        {executed ? (
-          <>
-            <CheckCircle2 size={14} /> Action Executed
-          </>
-        ) : (
-          <>
-            <Play size={14} /> Execute Action
-          </>
-        )}
-      </button>
     </div>
   );
 }

@@ -16,10 +16,7 @@ export default function App() {
     spikePlantId,
     mitigations,
     selectedAction,
-    setSelectedAction,
-    executed,
     runSimulation,
-    confirmAction,
     alertActive,
   } = useClusterGuard();
 
@@ -36,13 +33,7 @@ export default function App() {
           <AgentPipeline agentStatus={agentStatus} />
           <LogFeed log={log} />
           {phase === "resolved" && (
-            <MitigationPanel
-              mitigations={mitigations}
-              selectedAction={selectedAction}
-              setSelectedAction={setSelectedAction}
-              executed={executed}
-              onExecute={confirmAction}
-            />
+            <MitigationPanel mitigations={mitigations} selectedAction={selectedAction} />
           )}
         </div>
       </div>

@@ -4,7 +4,6 @@ import {
   fetchSensitiveZones,
   subscribeTelemetry,
   runSpikeSimulation,
-  executeAction,
 } from "../data/mockApi";
 import { AGENTS } from "../data/mockData";
 import { timeStr } from "./useClock";
@@ -21,7 +20,6 @@ export function useClusterGuard() {
   const [spikePlantId, setSpikePlantId] = useState(null);
   const [mitigations, setMitigations] = useState([]);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [executed, setExecuted] = useState(false);
   const cancelSim = useRef(null);
 
   // initial load
@@ -49,7 +47,6 @@ export function useClusterGuard() {
     setPhase("running");
     setSpikePlantId(target.id);
     setSelectedAction(null);
-    setExecuted(false);
     setMitigations([]);
     setAgentStatus(initialAgentStatus());
     setLog([]);
@@ -70,15 +67,6 @@ export function useClusterGuard() {
     });
   }, [plants, pushLog]);
 
-  const confirmAction = useCallback(async () => {
-    if (selectedAction === null) return;
-    const res = await executeAction(selectedAction);
-    if (res.ok) {
-      setExecuted(true);
-      pushLog("Operator", `Executed "${res.action.name}".`);
-    }
-  }, [selectedAction, pushLog]);
-
   useEffect(() => () => cancelSim.current?.(), []);
 
   return {
@@ -90,10 +78,7 @@ export function useClusterGuard() {
     spikePlantId,
     mitigations,
     selectedAction,
-    setSelectedAction,
-    executed,
     runSimulation,
-    confirmAction,
     alertActive: phase !== "idle",
   };
 }
