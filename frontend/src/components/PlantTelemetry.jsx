@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { MapPin, Activity, ChevronDown, Zap, Loader2 } from "lucide-react";
 import Meter from "./Meter";
-import { ESTATES } from "../data/mockData";
 
-export default function PlantTelemetry({ plants, phase, onSimulate }) {
-  const [estate, setEstate] = useState(ESTATES[0]);
+export default function PlantTelemetry({
+  clusters,
+  selectedCluster,
+  onSelectCluster,
+  plants,
+  phase,
+  onSimulate,
+}) {
   const [estateOpen, setEstateOpen] = useState(false);
 
   return (
@@ -13,7 +18,7 @@ export default function PlantTelemetry({ plants, phase, onSimulate }) {
         <MapPin size={12} /> Industrial Estate
       </div>
       <div className="estate-select" onClick={() => setEstateOpen((o) => !o)}>
-        <span>{estate}</span>
+        <span>{selectedCluster ? selectedCluster.name : "Loading…"}</span>
         <ChevronDown
           size={14}
           style={{ transform: estateOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}
@@ -21,16 +26,16 @@ export default function PlantTelemetry({ plants, phase, onSimulate }) {
       </div>
       {estateOpen && (
         <div className="estate-menu">
-          {ESTATES.map((e) => (
+          {clusters.map((c) => (
             <div
-              key={e}
-              className={`estate-opt ${e === estate ? "sel" : ""}`}
+              key={c.id}
+              className={`estate-opt ${c.id === selectedCluster?.id ? "sel" : ""}`}
               onClick={() => {
-                setEstate(e);
+                onSelectCluster(c.id);
                 setEstateOpen(false);
               }}
             >
-              {e}
+              {c.name}
             </div>
           ))}
         </div>
@@ -44,7 +49,7 @@ export default function PlantTelemetry({ plants, phase, onSimulate }) {
           <div className="plant-top">
             <div>
               <div className="plant-name">{p.name}</div>
-              <div className="plant-id mono">{p.id}</div>
+              <div className="plant-id mono">{p.id} · {p.industryType}</div>
             </div>
             <div className="plant-val mono" style={{ color: p.status === "spike" ? "var(--red)" : "var(--text)" }}>
               {p.level.toFixed(0)}%
@@ -57,7 +62,7 @@ export default function PlantTelemetry({ plants, phase, onSimulate }) {
         </div>
       ))}
 
-      <button className="sim-btn" onClick={onSimulate} disabled={phase === "running"}>
+      <button className="sim-btn" onClick={onSimulate} disabled={phase === "running" || plants.length === 0}>
         {phase === "running" ? <Loader2 size={14} className="spin" /> : <Zap size={14} />}
         {phase === "running" ? "Simulating…" : "Simulate Spike"}
       </button>

@@ -8,6 +8,9 @@ import { useClusterGuard } from "./hooks/useClusterGuard";
 
 export default function App() {
   const {
+    clusters,
+    selectedCluster,
+    setSelectedClusterId,
     plants,
     zones,
     phase,
@@ -25,9 +28,16 @@ export default function App() {
       <Header alertActive={alertActive} />
 
       <div className="grid">
-        <PlantTelemetry plants={plants} phase={phase} onSimulate={runSimulation} />
+        <PlantTelemetry
+          clusters={clusters}
+          selectedCluster={selectedCluster}
+          onSelectCluster={setSelectedClusterId}
+          plants={plants}
+          phase={phase}
+          onSimulate={runSimulation}
+        />
 
-        <RiskMap plants={plants} zones={zones} spikePlantId={spikePlantId} />
+        <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
 
         <div className="panel scrollpane">
           <AgentPipeline agentStatus={agentStatus} />
