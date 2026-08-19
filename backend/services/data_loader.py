@@ -73,7 +73,7 @@ def _load_csv(filename: str, required_columns: Optional[list] = None) -> list[di
             )
 
     # Replace NaN with None so dicts are JSON-serialisable
-    df = df.where(pd.notnull(df), other=None)
+    df = df.astype(object).where(pd.notnull(df), None)
 
     return df.to_dict(orient="records")
 

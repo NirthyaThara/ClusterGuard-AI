@@ -14,10 +14,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 
-from backend.routes import plants, risk, alerts, users
+from backend.routes import plants, risk, alerts, users, gis
 from backend.services.data_loader import (
     load_clusters,
     load_mitigation_actions,
+    load_sensitive_locations,
 )
 
 # ---------------------------------------------------------------------------
@@ -62,6 +63,7 @@ app.include_router(plants.router)
 app.include_router(risk.router)
 app.include_router(alerts.router)
 app.include_router(users.router)
+app.include_router(gis.router)
 
 
 # ---------------------------------------------------------------------------
@@ -86,6 +88,8 @@ def root():
             "users": "/users/{user_id}/plants",
             "clusters": "/clusters",
             "mitigation_actions": "/mitigation-actions",
+            "gis": "/api/gis/{plant_id}",
+            "gis_nearby": "/api/gis/{plant_id}/nearby",
         },
     }
 
@@ -129,3 +133,31 @@ def list_mitigation_actions():
     except (FileNotFoundError, ValueError) as exc:
         raise HTTPException(status_code=500, detail=str(exc))
     return {"count": len(actions), "mitigation_actions": actions}
+
+
+# ---------------------------------------------------------------------------
+# Sensitive locations endpoint (supplementary)
+# ---------------------------------------------------------------------------
+@app.get("/sensitive-locations", tags=["Sensitive Locations"], summary="List all sensitive locations")
+def list_sensitive_locations(cluster_id: str = None):
+    """
+    Return all sensitive location records from sensitive_locations.csv.
+
+    Optionally filter by cluster_id query parameter.
+
+    Each location has:
+    - location_id, cluster_id, location_type, name
+    - latitude, longitude, estimated_population, sensitivity_weight
+    """
+    try:
+        locations = load_sensitive_locations()
+    except (FileNotFoundError, ValueError) as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+    if cluster_id:
+        locations = [
+            loc for loc in locations
+            if str(loc.get("cluster_id", "")).strip() == cluster_id.strip()
+        ]
+
+    return {"count": len(locations), "sensitive_locations": locations}

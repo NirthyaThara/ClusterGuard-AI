@@ -235,6 +235,16 @@ body {
   box-shadow: 0 0 0 1px rgba(255, 77, 106, 0.25), 0 0 16px rgba(255, 77, 106, 0.15);
 }
 
+.plant-card.selected {
+  border-color: var(--violet);
+  background: rgba(139, 127, 232, 0.08);
+  box-shadow: 0 0 0 1px rgba(139, 127, 232, 0.4), 0 0 12px rgba(139, 127, 232, 0.2);
+}
+
+.plant-card:hover {
+  border-color: rgba(139, 127, 232, 0.4);
+}
+
 .plant-top {
   display: flex;
   align-items: center;
@@ -590,6 +600,92 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ---------- GIS Impact Animations ---------- */
+@keyframes gisPulse {
+  0%, 100% {
+    stroke-opacity: 0.8;
+    stroke-width: 2px;
+    fill-opacity: 0.12;
+  }
+  50% {
+    stroke-opacity: 0.35;
+    stroke-width: 3.5px;
+    fill-opacity: 0.05;
+  }
+}
+
+.gis-impact-circle {
+  animation: gisPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes gisRingExpand {
+  0% {
+    stroke-opacity: 0.8;
+    stroke-width: 1.5px;
+    fill-opacity: 0.08;
+  }
+  65% {
+    stroke-opacity: 0.25;
+    stroke-width: 3px;
+    fill-opacity: 0.02;
+  }
+  100% {
+    stroke-opacity: 0;
+    stroke-width: 1px;
+    fill-opacity: 0;
+  }
+}
+
+.gis-impact-pulse-ring {
+  animation: gisRingExpand 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes affectedPulse {
+  0%, 100% {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+  }
+  50% {
+    stroke-opacity: 0.5;
+    stroke-width: 4px;
+  }
+}
+
+.affected-marker-pulse {
+  animation: affectedPulse 2s ease-in-out infinite;
+}
+
+@keyframes haloPulse {
+  0%, 100% {
+    stroke-opacity: 0.9;
+    stroke-width: 1.5px;
+  }
+  50% {
+    stroke-opacity: 0.2;
+    stroke-width: 3px;
+  }
+}
+
+.source-halo-pulse {
+  animation: haloPulse 1.8s ease-in-out infinite;
+}
+
+/* Clickable Log Entries */
+.clickable-log {
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.clickable-log:hover {
+  background: rgba(139, 127, 232, 0.12);
+  transform: translateX(2px);
+}
+
+.clickable-log:hover .log-m {
+  color: var(--text);
 }
 
 /* ---------- responsive ---------- */
