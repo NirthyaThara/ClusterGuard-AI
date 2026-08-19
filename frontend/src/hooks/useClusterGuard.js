@@ -17,15 +17,10 @@ const initialAgentStatus = () =>
 const POLL_INTERVAL = 8000;
 
 export function useClusterGuard() {
-<<<<<<< HEAD
-  const [clusters, setClusters] = useState([]);
-  const [selectedClusterId, setSelectedClusterId] = useState(null);
-=======
   // --- core state ---
   const [clusters, setClusters] = useState([]);
   const [selectedCluster, setSelectedCluster] = useState(null);
   const [allPlants, setAllPlants] = useState([]);
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
   const [plants, setPlants] = useState([]);
   const [zones, setZones] = useState([]);
   const [phase, setPhase] = useState("idle"); // idle | running | resolved
@@ -43,39 +38,6 @@ export function useClusterGuard() {
   const cancelSim = useRef(null);
   const pollRef = useRef(null);
 
-<<<<<<< HEAD
-  // initial load — clusters first, then default to the first one
-  useEffect(() => {
-    fetchClusters().then((cs) => {
-      setClusters(cs);
-      if (cs.length) setSelectedClusterId(cs[0].id);
-    });
-  }, []);
-
-  // reload plants/zones whenever the selected cluster changes, and reset
-  // any in-flight or resolved simulation since it referenced the old
-  // cluster's plants.
-  useEffect(() => {
-    if (!selectedClusterId) return;
-    cancelSim.current?.();
-    setPhase("idle");
-    setAgentStatus(initialAgentStatus());
-    setLog([]);
-    setSpikePlantId(null);
-    setMitigations([]);
-    setSelectedAction(null);
-
-    fetchPlants(selectedClusterId).then(setPlants);
-    fetchSensitiveZones(selectedClusterId).then(setZones);
-  }, [selectedClusterId]);
-
-  // ambient telemetry jitter
-  useEffect(() => {
-    if (plants.length === 0) return;
-    const unsub = subscribeTelemetry(setPlants);
-    return unsub;
-  }, [plants.length, selectedClusterId]);
-=======
   // --- initial data load ---
   useEffect(() => {
     let cancelled = false;
@@ -136,7 +98,6 @@ export function useClusterGuard() {
       setLog([]);
       setSelectedMapPlant(null);
       setGisReport(null);
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
       try {
         const zonesData = await fetchSensitiveLocations(cluster.id);
@@ -217,25 +178,7 @@ export function useClusterGuard() {
     setAgentStatus(initialAgentStatus());
     setLog([]);
 
-<<<<<<< HEAD
-    cancelSim.current = runSpikeSimulation(target, {
-      onPlantSpike: (id, level) =>
-        setPlants((prev) =>
-          prev.map((p) => (p.id === id ? { ...p, level, status: "spike" } : p))
-        ),
-      onAgentStatus: (key, status) =>
-        setAgentStatus((s) => ({ ...s, [key]: status })),
-      onLog: pushLog,
-      onResolved: (options, recommendedIndex) => {
-        setMitigations(options);
-        setSelectedAction(recommendedIndex);
-        setPhase("resolved");
-      },
-    });
-  }, [plants, pushLog]);
-=======
     const timeouts = [];
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
     // Fetch real risk data and real GIS data, then animate the pipeline
     Promise.all([fetchRisk(target.id), fetchGis(target.id)])
@@ -270,8 +213,8 @@ export function useClusterGuard() {
               breaches.length > 0
                 ? breaches.join(", ")
                 : warnings.length > 0
-                ? `Warnings on ${warnings.join(", ")}`
-                : "All within limits";
+                  ? `Warnings on ${warnings.join(", ")}`
+                  : "All within limits";
             pushLog(
               "Monitoring",
               `Telemetry scan: ${breachStr}. Risk score ${score}/100.`

@@ -3,14 +3,6 @@ import { MapPin, Activity, ChevronDown, Zap, Loader2 } from "lucide-react";
 import Meter from "./Meter";
 
 export default function PlantTelemetry({
-<<<<<<< HEAD
-  clusters,
-  selectedCluster,
-  onSelectCluster,
-  plants,
-  phase,
-  onSimulate,
-=======
   plants,
   phase,
   onSimulate,
@@ -19,7 +11,6 @@ export default function PlantTelemetry({
   switchCluster,
   selectedMapPlantId,
   onSelectPlant,
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 }) {
   const [estateOpen, setEstateOpen] = useState(false);
 
@@ -31,11 +22,7 @@ export default function PlantTelemetry({
         <MapPin size={12} /> Industrial Estate
       </div>
       <div className="estate-select" onClick={() => setEstateOpen((o) => !o)}>
-<<<<<<< HEAD
-        <span>{selectedCluster ? selectedCluster.name : "Loading…"}</span>
-=======
         <span>{displayName}</span>
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
         <ChevronDown
           size={14}
           style={{ transform: estateOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}
@@ -46,15 +33,9 @@ export default function PlantTelemetry({
           {clusters.map((c) => (
             <div
               key={c.id}
-<<<<<<< HEAD
-              className={`estate-opt ${c.id === selectedCluster?.id ? "sel" : ""}`}
-              onClick={() => {
-                onSelectCluster(c.id);
-=======
               className={`estate-opt ${selectedCluster && c.id === selectedCluster.id ? "sel" : ""}`}
               onClick={() => {
                 switchCluster(c);
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
                 setEstateOpen(false);
               }}
             >
@@ -72,17 +53,6 @@ export default function PlantTelemetry({
           (Click plant for GIS)
         </span>
       </div>
-<<<<<<< HEAD
-      {plants.map((p) => (
-        <div key={p.id} className={`plant-card ${p.status === "spike" ? "spike" : ""}`}>
-          <div className="plant-top">
-            <div>
-              <div className="plant-name">{p.name}</div>
-              <div className="plant-id mono">{p.id} · {p.industryType}</div>
-            </div>
-            <div className="plant-val mono" style={{ color: p.status === "spike" ? "var(--red)" : "var(--text)" }}>
-              {p.level.toFixed(0)}%
-=======
       {plants.map((p) => {
         const isSelected = selectedMapPlantId === p.id;
         return (
@@ -103,7 +73,6 @@ export default function PlantTelemetry({
               <div className="plant-val mono" style={{ color: p.status === "spike" ? "var(--red)" : "var(--text)" }}>
                 {p.level.toFixed(0)}%
               </div>
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
             </div>
             <Meter
               value={p.level}

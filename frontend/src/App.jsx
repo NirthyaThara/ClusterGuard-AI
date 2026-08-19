@@ -60,17 +60,6 @@ export default function App() {
 
       <div className="grid">
         <PlantTelemetry
-<<<<<<< HEAD
-          clusters={clusters}
-          selectedCluster={selectedCluster}
-          onSelectCluster={setSelectedClusterId}
-          plants={plants}
-          phase={phase}
-          onSimulate={runSimulation}
-        />
-
-        <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
-=======
           plants={plants}
           phase={phase}
           onSimulate={runSimulation}
@@ -90,7 +79,6 @@ export default function App() {
           gisReport={gisReport}
           onSelectPlant={selectPlantOnMap}
         />
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
         <div className="panel scrollpane">
           <AgentPipeline agentStatus={agentStatus} />

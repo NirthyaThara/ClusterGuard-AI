@@ -1,20 +1,11 @@
-<<<<<<< HEAD
-import { MapContainer, TileLayer, CircleMarker, Circle, Tooltip } from "react-leaflet";
-import { TrendingUp, Wind } from "lucide-react";
-=======
 import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, CircleMarker, Circle, Tooltip, useMap } from "react-leaflet";
 import { TrendingUp, Wind, AlertTriangle, ShieldCheck, MapPin, Radio } from "lucide-react";
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
 // Dark basemap for high-contrast environmental operations dashboard
 const TILE_URL = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
 const TILE_ATTR = '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; OpenStreetMap contributors';
 
-<<<<<<< HEAD
-export default function RiskMap({ cluster, plants, zones, spikePlantId }) {
-  const spikePlant = plants.find((p) => p.id === spikePlantId);
-=======
 // Haversine distance in km as client fallback
 function calcHaversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371.0;
@@ -122,16 +113,11 @@ export default function RiskMap({
 
   // Map key resets only when estate/cluster changes
   const mapKey = selectedCluster ? selectedCluster.id : "default-map";
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
   if (!cluster) return <div className="map-wrap" />;
 
   return (
     <div className="map-wrap">
-<<<<<<< HEAD
-      <div className="panel-label" style={{ padding: "16px 16px 0" }}>
-        <TrendingUp size={12} /> Cluster Risk Map — {cluster.name}
-=======
       <div className="panel-label" style={{ padding: "16px 16px 0", justifyContent: "space-between" }}>
         <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <TrendingUp size={12} /> GIS Environmental Impact Map
@@ -141,21 +127,14 @@ export default function RiskMap({
             Focus: {activePlant.name} ({activePlant.id}) · Radius: {impactRadiusKm} km
           </span>
         )}
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
       </div>
 
       <div className="map-canvas">
         {/* key forces a clean remount + re-center when the cluster changes */}
         <MapContainer
-<<<<<<< HEAD
-          key={cluster.id}
-          center={[cluster.lat, cluster.lng]}
-          zoom={14}
-=======
           key={mapKey}
           center={defaultCenter}
           zoom={13}
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
           scrollWheelZoom
           style={{ height: "100%", width: "100%", background: "transparent" }}
           zoomControl={false}
@@ -212,20 +191,6 @@ export default function RiskMap({
             </>
           )}
 
-<<<<<<< HEAD
-          {zones.map((z) => (
-            <CircleMarker
-              key={z.id}
-              center={[z.lat, z.lng]}
-              radius={5}
-              pathOptions={{ color: "#f5a623", fillColor: "#f5a623", fillOpacity: 0.9 }}
-            >
-              <Tooltip direction="top" offset={[0, -4]} opacity={1}>
-                {z.name} · {z.kind}
-              </Tooltip>
-            </CircleMarker>
-          ))}
-=======
           {/* ========================================================= */}
           {/* LAYER 2: UNAFFECTED SENSITIVE LOCATIONS (OUTSIDE ZONE)    */}
           {/* ========================================================= */}
@@ -256,7 +221,6 @@ export default function RiskMap({
                 </Tooltip>
               </CircleMarker>
             ))}
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
 
           {/* ========================================================= */}
           {/* LAYER 3: AFFECTED SENSITIVE LOCATIONS (INSIDE ZONE)       */}
@@ -406,12 +370,8 @@ export default function RiskMap({
           )}
         </MapContainer>
 
-<<<<<<< HEAD
-        <div className="wind-arrow mono" title="Placeholder — no wind field in current dataset">
-=======
         {/* Ambient wind badge */}
         <div className="wind-arrow mono">
->>>>>>> c994b808eb86580c0605fe6c05cf37cda9706363
           <Wind size={12} /> NE · 14 km/h
         </div>
 
