@@ -25,6 +25,9 @@ export default function App() {
     selectedAction,
     runSimulation,
     alertActive,
+    selectedMapPlant,
+    gisReport,
+    handleSelectPlant,
   } = useClusterGuard();
 
   return (
@@ -45,7 +48,15 @@ export default function App() {
         />
 
         <div className="center-col">
-          <RiskMap cluster={selectedCluster} plants={plants} zones={zones} spikePlantId={spikePlantId} />
+          <RiskMap
+            selectedCluster={selectedCluster}
+            plants={plants}
+            zones={zones}
+            spikePlantId={spikePlantId}
+            selectedMapPlant={selectedMapPlant}
+            gisReport={gisReport}
+            onSelectPlant={handleSelectPlant}
+          />
           <PollutantRiskProfile plants={plants} />
           <MitigationPanel mitigations={mitigations} selectedAction={selectedAction} />
         </div>

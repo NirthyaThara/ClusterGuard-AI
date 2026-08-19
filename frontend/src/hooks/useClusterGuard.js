@@ -23,6 +23,8 @@ export function useClusterGuard() {
   const [spikePlantId, setSpikePlantId] = useState(null);
   const [mitigations, setMitigations] = useState([]);
   const [selectedAction, setSelectedAction] = useState(null);
+  const [selectedMapPlant, setSelectedMapPlant] = useState(null);
+  const [gisReport, setGisReport] = useState(null);
   const cancelSim = useRef(null);
 
   // initial load — clusters first, then default to the first one
@@ -60,6 +62,21 @@ export function useClusterGuard() {
   const pushLog = useCallback((agent, msg) => {
     setLog((prev) => [...prev, { t: timeStr(new Date()), agent, msg }].slice(-40));
   }, []);
+
+  const handleSelectPlant = useCallback(async (plantId) => {
+    const plant = plants.find((p) => p.id === plantId);
+    setSelectedMapPlant(plant || null);
+    setGisReport(null);
+    if (!plant) return;
+    try {
+      const res = await fetch(`https://clusterguard-ai.onrender.com/api/gis/${plantId}`);
+      if (!res.ok) throw new Error("API request failed");
+      const data = await res.json();
+      setGisReport(data);
+    } catch (err) {
+      console.error("GIS API Error:", err);
+    }
+  }, [plants]);
 
   const runSimulation = useCallback(() => {
     cancelSim.current?.();
@@ -107,5 +124,8 @@ export function useClusterGuard() {
     selectedAction,
     runSimulation,
     alertActive: phase !== "idle",
+    selectedMapPlant,
+    gisReport,
+    handleSelectPlant,
   };
 }
