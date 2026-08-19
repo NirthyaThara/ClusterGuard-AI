@@ -1,78 +1,56 @@
 """
 backend/routes/gis.py
 =====================
-ClusterGuard — GIS Agent API Routes
+ClusterGuard – GIS Agent API Routes
 
 Endpoints:
-    GET /api/gis/{plant_id}          — Full GIS impact assessment for a plant
-    GET /api/gis/{plant_id}/nearby   — Lightweight: just the nearby locations list
-
-Architecture:
-    FastAPI route -> agents/gis_agent.assess_plant_gis_impact() -> CSV datasets
-
-The GIS Agent (agents/gis_agent.py) owns ALL geospatial logic:
-  - Data loading (plants.csv, sensitive_locations.csv)
-  - Haversine distance calculation
-  - Sensitivity-weighted impact classification (HIGH / MEDIUM / LOW)
-  - Overall spatial impact aggregation
-
-This route does NOTHING except:
-  1. Validate the HTTP request.
-  2. Call the GIS Agent.
-  3. Return the result or a structured error.
-
-Future Decision + Mitigation Agent should consume the JSON produced here directly.
+    GET /gis/{plant_id}          – Full GIS impact assessment for a plant
+    GET /api/gis/{plant_id}      – Compatibility endpoint (frontend)
+    GET /gis/{plant_id}/nearby   – Lightweight: just the nearby locations list
+    GET /api/gis/{plant_id}/nearby - Compatibility endpoint (frontend)
 """
 
+import csv
 from fastapi import APIRouter, HTTPException, Query
-
-# Import the GIS Agent.  agents/ is a sibling of backend/ at the repo root,
-# and the repo root is on sys.path when running: uvicorn backend.main:app
+from fastapi.responses import JSONResponse
 from agents import gis_agent
 
-router = APIRouter(prefix="/api/gis", tags=["GIS"])
-
+router = APIRouter(tags=["GIS"])
 
 # ---------------------------------------------------------------------------
-# GET /api/gis/{plant_id}
+# GET /gis/{plant_id} and GET /api/gis/{plant_id}
 # ---------------------------------------------------------------------------
 @router.get(
-    "/{plant_id}",
+    "/gis/{plant_id}",
     summary="Full GIS impact assessment for a plant",
-    response_description=(
-        "Structured GIS report: plant location, nearby sensitive locations with "
-        "distances and impact levels, and an overall spatial impact rating."
-    ),
+    response_description="Structured GIS report: plant location, nearby sensitive locations with distances and impact levels, and overall spatial impact rating."
+)
+@router.get(
+    "/api/gis/{plant_id}",
+    summary="Full GIS impact assessment for a plant (compatibility)",
+    response_description="Structured GIS report: plant location, nearby sensitive locations with distances and impact levels, and overall spatial impact rating.",
+    include_in_schema=False
 )
 def get_gis_impact(
     plant_id: str,
     radius_km: float = Query(
         default=5.0,
-        gt=0,
-        le=50,
         description="Impact radius in kilometres (default 5 km, max 50 km).",
     ),
 ):
     """
     Run a full GIS spatial impact assessment for the given plant.
-
-    Steps performed by the GIS Agent:
-    1. Locate the plant in plants.csv (lat/lon).
-    2. Load all sensitive locations from sensitive_locations.csv.
-    3. Calculate Haversine distance from the plant to each location.
-    4. Classify each nearby location as HIGH / MEDIUM / LOW impact.
-    5. Aggregate an overall spatial impact rating.
-
-    Returns HTTP 404 if plant_id is not found.
-    Returns HTTP 500 if a dataset cannot be loaded.
-
-    The returned JSON is designed to be consumed directly by a future
-    Decision + Mitigation Agent without additional transformation.
-
-    Example:
-        GET /api/gis/PL01
-        GET /api/gis/PL01?radius_km=3
     """
+    # Robust radius validation
+    if radius_km <= 0 or radius_km > 50:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "Invalid Radius",
+                "message": f"Radius value {radius_km} must be greater than 0 and less than or equal to 50."
+            }
+        )
+
     try:
         result = gis_agent.assess_plant_gis_impact(plant_id, radius_km=radius_km)
         return result
@@ -83,74 +61,83 @@ def get_gis_impact(
             raise HTTPException(
                 status_code=404,
                 detail={
-                    "error": "Plant not found",
+                    "error": "Plant Not Found",
                     "plant_id": plant_id,
                     "message": error_msg,
-                    "hint": "Use GET /plants to see valid plant IDs.",
-                },
+                    "hint": "Use GET /plants to see valid plant IDs."
+                }
             )
+        # If ValueError occurs but not "not found", it might be a data parsing error
         raise HTTPException(
-            status_code=422,
+            status_code=500,
             detail={
-                "error": "Invalid input",
-                "plant_id": plant_id,
-                "message": error_msg,
-            },
+                "error": "Dataset Malformed",
+                "message": f"CSV dataset contains invalid numeric values: {error_msg}"
+            }
+        )
+
+    except KeyError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Dataset Malformed",
+                "message": f"CSV dataset is missing required column: {str(exc)}"
+            }
         )
 
     except FileNotFoundError as exc:
         raise HTTPException(
             status_code=500,
             detail={
-                "error": "Dataset not found",
-                "message": str(exc),
-            },
+                "error": "Dataset Missing",
+                "message": "One or more required CSV datasets could not be found on the server."
+            }
         )
 
     except Exception as exc:
         raise HTTPException(
             status_code=500,
             detail={
-                "error": "GIS assessment failed",
-                "plant_id": plant_id,
-                "message": str(exc),
-            },
+                "error": "Internal Server Error",
+                "message": f"An unexpected error occurred during the GIS calculation: {str(exc)}"
+            }
         )
 
 
 # ---------------------------------------------------------------------------
-# GET /api/gis/{plant_id}/nearby
+# GET /gis/{plant_id}/nearby and GET /api/gis/{plant_id}/nearby
 # ---------------------------------------------------------------------------
 @router.get(
-    "/{plant_id}/nearby",
+    "/gis/{plant_id}/nearby",
     summary="Nearby sensitive locations for a plant (lightweight)",
-    response_description=(
-        "List of sensitive locations within radius_km, sorted by distance. "
-        "Lighter than the full assessment — useful for map marker rendering."
-    ),
+    response_description="List of sensitive locations within radius_km, sorted by distance."
+)
+@router.get(
+    "/api/gis/{plant_id}/nearby",
+    summary="Nearby sensitive locations for a plant (compatibility)",
+    response_description="List of sensitive locations within radius_km, sorted by distance.",
+    include_in_schema=False
 )
 def get_nearby_locations(
     plant_id: str,
     radius_km: float = Query(
         default=5.0,
-        gt=0,
-        le=50,
         description="Search radius in kilometres (default 5 km, max 50 km).",
     ),
 ):
     """
     Return only the list of sensitive locations within radius_km of the plant.
-
-    This is a lighter alternative to GET /api/gis/{plant_id} — it skips the
-    aggregation step and returns just the proximity data, which is useful when
-    the frontend only needs to render map markers.
-
-    Returns HTTP 404 if plant_id is not found.
-
-    Example:
-        GET /api/gis/PL01/nearby
-        GET /api/gis/PL01/nearby?radius_km=2
     """
+    # Robust radius validation
+    if radius_km <= 0 or radius_km > 50:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "Invalid Radius",
+                "message": f"Radius value {radius_km} must be greater than 0 and less than or equal to 50."
+            }
+        )
+
     try:
         nearby = gis_agent.get_nearby_sensitive_locations(plant_id, radius_km=radius_km)
         return {
@@ -162,24 +149,47 @@ def get_nearby_locations(
 
     except ValueError as exc:
         error_msg = str(exc)
-        status = 404 if "not found" in error_msg.lower() else 422
+        if "not found" in error_msg.lower():
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "error": "Plant Not Found",
+                    "plant_id": plant_id,
+                    "message": error_msg,
+                    "hint": "Use GET /plants to see valid plant IDs."
+                }
+            )
         raise HTTPException(
-            status_code=status,
+            status_code=500,
             detail={
-                "error": "Plant not found" if status == 404 else "Invalid input",
-                "plant_id": plant_id,
-                "message": error_msg,
-            },
+                "error": "Dataset Malformed",
+                "message": f"CSV dataset contains invalid numeric values: {error_msg}"
+            }
+        )
+
+    except KeyError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Dataset Malformed",
+                "message": f"CSV dataset is missing required column: {str(exc)}"
+            }
         )
 
     except FileNotFoundError as exc:
         raise HTTPException(
             status_code=500,
-            detail={"error": "Dataset not found", "message": str(exc)},
+            detail={
+                "error": "Dataset Missing",
+                "message": "One or more required CSV datasets could not be found on the server."
+            }
         )
 
     except Exception as exc:
         raise HTTPException(
             status_code=500,
-            detail={"error": "GIS lookup failed", "plant_id": plant_id, "message": str(exc)},
+            detail={
+                "error": "Internal Server Error",
+                "message": f"An unexpected error occurred during the GIS calculation: {str(exc)}"
+            }
         )

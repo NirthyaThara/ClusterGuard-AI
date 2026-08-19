@@ -61,23 +61,66 @@ def list_plants():
 @router.get("/{plant_id}", summary="Get a single plant by ID")
 def get_plant(plant_id: str):
     """
-    Return a single plant by plant_id.
+    Return a single plant by plant_id with only deterministic metadata.
 
     Returns HTTP 404 if the plant does not exist.
     """
     try:
         plant = get_plant_by_id(plant_id)
-    except (FileNotFoundError, ValueError) as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Dataset Missing",
+                "message": "One or more required CSV datasets could not be found on the server."
+            }
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Dataset Malformed",
+                "message": f"CSV dataset contains malformed data: {str(exc)}"
+            }
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Internal Server Error",
+                "message": f"An unexpected error occurred during the plant lookup: {str(exc)}"
+            }
+        )
 
     if plant is None:
         raise HTTPException(
             status_code=404,
-            detail=f"Plant '{plant_id}' not found. "
-                   "Check /plants for valid plant IDs.",
+            detail={
+                "error": "Plant Not Found",
+                "plant_id": plant_id,
+                "message": f"Plant '{plant_id}' not found in the database.",
+                "hint": "Check GET /plants for valid plant IDs."
+            }
         )
 
-    return plant
+    try:
+        # Filter and structure the deterministic fields
+        return {
+            "plant_id": plant.get("plant_id"),
+            "plant_name": plant.get("plant_name"),
+            "industry_type": plant.get("industry_type"),
+            "cluster_id": plant.get("cluster_id") if plant.get("cluster_id") else None,
+            "latitude": float(plant["latitude"]) if plant.get("latitude") is not None else None,
+            "longitude": float(plant["longitude"]) if plant.get("longitude") is not None else None,
+        }
+    except (KeyError, ValueError, TypeError) as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "Dataset Malformed",
+                "message": f"Required fields are missing or invalid in the plant record: {str(exc)}"
+            }
+        )
 
 
 # ---------------------------------------------------------------------------

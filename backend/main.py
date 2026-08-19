@@ -10,9 +10,11 @@ Swagger UI:  http://127.0.0.1:8000/docs
 ReDoc:       http://127.0.0.1:8000/redoc
 """
 
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import HTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 from backend.routes import plants, risk, alerts, users, gis
 from backend.services.data_loader import (
@@ -20,6 +22,7 @@ from backend.services.data_loader import (
     load_mitigation_actions,
     load_sensitive_locations,
 )
+from agents import gis_agent
 
 # ---------------------------------------------------------------------------
 # Application instance
@@ -56,6 +59,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# ---------------------------------------------------------------------------
+# Request validation exception handler
+# ---------------------------------------------------------------------------
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "error": "Validation Error",
+            "message": "Invalid request parameters.",
+            "details": exc.errors()
+        }
+    )
+
+
 # ---------------------------------------------------------------------------
 # Include routers
 # ---------------------------------------------------------------------------
@@ -64,6 +83,51 @@ app.include_router(risk.router)
 app.include_router(alerts.router)
 app.include_router(users.router)
 app.include_router(gis.router)
+
+
+# ---------------------------------------------------------------------------
+# Health endpoint
+# ---------------------------------------------------------------------------
+@app.get("/health", tags=["Health"], summary="API health check")
+def health():
+    """
+    Detailed health check for backend and GIS datasets.
+    """
+    try:
+        # Check if CSV files exist
+        plants_exist = os.path.exists(gis_agent.PLANTS_CSV)
+        locations_exist = os.path.exists(gis_agent.LOCATIONS_CSV)
+        
+        if not plants_exist or not locations_exist:
+            return JSONResponse(
+                status_code=503,
+                content={
+                    "status": "unhealthy",
+                    "backend": "available",
+                    "gis_service": "unavailable",
+                    "detail": "One or more dataset files are missing."
+                }
+            )
+            
+        # Try loading to ensure not malformed
+        gis_agent._load_plants()
+        gis_agent._load_sensitive_locations()
+        
+        return {
+            "status": "healthy",
+            "backend": "available",
+            "gis_service": "available"
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "unhealthy",
+                "backend": "available",
+                "gis_service": "unavailable",
+                "detail": f"GIS service check failed: {str(e)}"
+            }
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -82,14 +146,15 @@ def root():
         "round": 1,
         "docs": "http://127.0.0.1:8000/docs",
         "endpoints": {
+            "health": "/health",
             "plants": "/plants",
             "risk": "/risk/{plant_id}",
             "alerts": "/alerts",
             "users": "/users/{user_id}/plants",
             "clusters": "/clusters",
             "mitigation_actions": "/mitigation-actions",
-            "gis": "/api/gis/{plant_id}",
-            "gis_nearby": "/api/gis/{plant_id}/nearby",
+            "gis": "/gis/{plant_id}",
+            "gis_nearby": "/gis/{plant_id}/nearby",
         },
     }
 
